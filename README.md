@@ -3,6 +3,8 @@
 
 ## Install
 
+ffmpeg needs to be installed.
+
 ```
 npm install -g video-clip-generator
 ```
