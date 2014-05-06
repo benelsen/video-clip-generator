@@ -52,7 +52,10 @@ mkdirp.sync( outputDirectory );
 // Get ffmpeg rolling
 
 // mp4: h264 + aac
-var mp4Command = new FFmpeg({ source: inputPath });
+var mp4Command = new FFmpeg({
+  source: inputPath,
+  preset: path.resolve(__dirname, 'lib/presets')
+});
 
 if ( argv.s ) {
   mp4Command.setStartTime(argv.s);
@@ -62,8 +65,12 @@ if ( argv.d ) {
   mp4Command.setDuration(argv.d);
 }
 
+if ( argv.tune ) {
+  mp4Command.addOption('-tune', argv.tune);
+}
+
 mp4Command
-  .usingPreset(x264Preset)
+  .usingPreset('mp4')
   .withSize('?x720')
   .on('start', startEvent)
   .on('codecData', codecDataEvent)
@@ -73,7 +80,10 @@ mp4Command
   .saveToFile(outputBase+'.mp4');
 
 // webm: vpx + vorbis
-var webmCommand = new FFmpeg({ source: inputPath });
+var webmCommand = new FFmpeg({
+  source: inputPath,
+  preset: path.resolve(__dirname, 'lib/presets')
+});
 
 if ( argv.s ) {
   webmCommand.setStartTime(argv.s);
@@ -84,7 +94,7 @@ if ( argv.d ) {
 }
 
 webmCommand
-  .usingPreset(webmPreset)
+  .usingPreset('webm')
   .withSize('?x720')
   .on('start', startEvent)
   .on('codecData', codecDataEvent)
@@ -94,7 +104,10 @@ webmCommand
   .saveToFile(outputBase+'.webm');
 
 // ogg: theora + vorbis
-var oggCommand = new FFmpeg({ source: inputPath });
+var oggCommand = new FFmpeg({
+  source: inputPath,
+  preset: path.resolve(__dirname, 'lib/presets')
+});
 
 if ( argv.s ) {
   oggCommand.setStartTime(argv.s);
@@ -105,7 +118,7 @@ if ( argv.d ) {
 }
 
 oggCommand
-  .usingPreset(oggPreset)
+  .usingPreset('ogg')
   .withSize('?x720')
   .on('start', startEvent)
   .on('codecData', codecDataEvent)
@@ -115,7 +128,10 @@ oggCommand
   .saveToFile(outputBase+'.ogg');
 
 
-var pngCommand = new FFmpeg({ source: inputPath });
+var pngCommand = new FFmpeg({
+  source: inputPath,
+  preset: path.resolve(__dirname, 'lib/presets')
+});
 
 if ( argv.s ) {
   pngCommand.setStartTime(argv.s);
@@ -126,10 +142,8 @@ if ( argv.d ) {
 }
 
 pngCommand
+  .usingPreset('png')
   .withSize('?x720')
-  .addOption('-vframes', '1')
-  .addOption('-r', '1')
-  .toFormat('image2')
   .on('start', startEvent)
   .on('codecData', codecDataEvent)
   .on('progress', progressEvent)
@@ -150,70 +164,6 @@ var html = Mustache.render(template, {
 });
 
 fs.writeFileSync( path.join(outputDirectory, 'index.html'), html, 'utf8');
-
-// Presets
-function x264Preset(cmd) {
-
-  cmd
-
-    // Video
-    .withVideoCodec('libx264')
-    .addOption('-preset', 'slow')
-    .addOption('-profile:v', 'high')
-    .addOption('-level', '4.2')
-    .addOptions(['-qmin 0', '-qmax 50'])
-    .addOption('-crf', '19')
-
-    // Audio
-    .withAudioCodec('libfdk_aac')
-    .addOption('-vbr', '4')
-
-    .toFormat('mp4')
-
-    .addOption('-movflags', '+faststart');
-
-  if ( argv.tune ) {
-    cmd.addOption('-tune', argv.tune);
-  }
-
-}
-
-function webmPreset(cmd) {
-
-  cmd
-
-    // Video
-    .withVideoCodec('libvpx')
-    .addOption('-b:v', '1.5M')
-    .addOption('-crf', '9')
-    .addOption('-keyint_min', '0')
-    .addOption('-g', '250')
-    .addOption('-skip_threshold', '0')
-    .addOptions(['-qmin 0', '-qmax 50'])
-
-    // Audio
-    .withAudioCodec('libvorbis')
-    .addOption('-q:a', '4')
-
-    .toFormat('webm');
-
-}
-
-function oggPreset(cmd) {
-
-  cmd
-
-    // Video
-    .withVideoCodec('libtheora')
-    .addOption('-q:v', '6')
-
-    // Audio
-    .withAudioCodec('libvorbis')
-    .addOption('-q:a', '4')
-
-    .toFormat('ogg');
-
-}
 
 function startEvent(commandLine) {
   console.log(commandLine, '\n');
