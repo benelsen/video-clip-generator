@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <title>{{title}}</title>
+    <meta name="description" content="">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style type="text/css">
+      html, body, video {
+        margin: 0;
+        padding: 0;
+      }
+      html, body {
+        height: 100%;
+      }
+      body {
+        background: #333;
+
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: center;
+        -webkit-justify-content: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+        -ms-flex-align: center;
+        align-items: center;
+      }
+    </style>
+
+  </head>
+  <body>
+
+    <video width="{{width}}" height="{{height}}" controls poster>
+      <source src="{{filename}}.webm" type="video/webm; codecs=vp8,vorbis" />
+      <source src="{{filename}}.mp4"  type="video/mp4; codecs=avc1.42E01E,mp4a.40.2" />
+      <source src="{{filename}}.ogg"  type="video/ogg; codecs=theora,vorbis" />
+      <img src="{{filename}}.png" alt="Poster Image" />
+    </video>
+
+  </body>
+</html>
