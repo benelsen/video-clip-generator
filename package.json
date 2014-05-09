@@ -1,6 +1,6 @@
 {
   "name": "video-clip-generator",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Generates a site with mp4, webm and ogg for small video clips",
   "author": "Ben Elsen <mail@benelsen.com>",
   "main": "index.js",
