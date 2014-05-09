@@ -31,7 +31,6 @@ Options:
  --baseurl, -b  http://example.com/html/video
 
     --open      Boolean                        Open url upon upload completion [default: true]
-					       Only works if --upload and --baseurl are set correctly
-
+                                               Only works if --upload and --baseurl are set correctly
     --tune      String                         tune option for x264 (e.g. animation, film)
 ```

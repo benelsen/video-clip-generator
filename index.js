@@ -240,7 +240,7 @@ function upload() {
     if ( argv.baseurl ) {
       url = path.join( argv.baseurl, path.basename(outputDirectory) );
       if ( argv.open ) {
-	cmdOpen(url);
+        cmdOpen(url);
       }
     } else {
       url = path.basename(outputDirectory);
