@@ -1,6 +1,6 @@
 {
   "name": "video-clip-generator",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Generates a site with mp4, webm and ogg for small video clips",
   "author": "Ben Elsen <mail@benelsen.com>",
   "main": "index.js",
@@ -9,7 +9,7 @@
   "license": "ISC",
   "dependencies": {
     "fluent-ffmpeg": "^1.7.1",
-    "minimist": "0.0.8",
+    "minimist": "0.0.9",
     "mkdirp": "^0.5.0",
     "moment": "^2.6.0",
     "mustache": "^0.8.1",
