@@ -25,6 +25,18 @@ var argv = require('minimist')(process.argv.slice(2), {
   }
 });
 
+if (argv.v || argv.version) {
+    return console.log(require('./package.json').version);
+}
+
+if (argv._[0] === 'help' || argv.h || argv.help || process.argv.length <= 2) {
+    return fs.createReadStream(__dirname + '/lib/usage.txt')
+        .pipe(process.stdout)
+        .on('close', function () {
+          process.exit(1);
+        });
+}
+
 var inputPath = path.resolve( argv._[0] ),
     inputBasename = path.basename( inputPath, path.extname(inputPath) );
 

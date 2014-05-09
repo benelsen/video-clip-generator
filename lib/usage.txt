@@ -1,17 +1,3 @@
-
-# video-clip-generator
-
-## Install
-
-ffmpeg needs to be installed.
-
-```
-npm install -g video-clip-generator
-```
-
-## Usage
-
-```
 video-clip-generator {options} [inputfile] [outputfolder]
 
 inputfile: ffmpeg readable video file
@@ -34,4 +20,3 @@ Options:
                                                Only works if --upload and --baseurl are set correctly
 
     --tune      String                         tune option for x264 (e.g. animation, film)
-```
