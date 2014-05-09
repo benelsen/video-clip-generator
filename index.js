@@ -1,15 +1,29 @@
 #!/usr/bin/env node
 
 var FFmpeg = require('fluent-ffmpeg'),
+    Rsync = require('rsync'),
     moment = require('moment'),
     fs = require('fs'),
     path = require('path'),
     mkdirp = require('mkdirp'),
     Mustache = require('mustache'),
     UUID = require('node-uuid'),
-    slug = require('slug');
+    slug = require('slug'),
+    cmdOpen = require('open');
 
-var argv = require('minimist')(process.argv.slice(2));
+var argv = require('minimist')(process.argv.slice(2), {
+  boolean: ['open'],
+  alias: {
+    start: 's',
+    duration: 'd',
+    title: 't',
+    baseurl: 'b',
+    upload: 'u'
+  },
+  default: {
+    open: true
+  }
+});
 
 var inputPath = path.resolve( argv._[0] ),
     inputBasename = path.basename( inputPath, path.extname(inputPath) );
@@ -40,7 +54,7 @@ if ( argv._[1] ) {
 
   }
 
-  outputDirectory = path.resolve( __dirname, 'output', filename );
+  outputDirectory = path.resolve( '.', filename );
 
 }
 
@@ -50,12 +64,14 @@ outputBase = path.join(outputDirectory, filename);
 mkdirp.sync( outputDirectory );
 
 // Get ffmpeg rolling
+var running = 0;
 
 // mp4: h264 + aac
 var mp4Command = new FFmpeg({
   source: inputPath,
   preset: path.resolve(__dirname, 'lib/presets')
 });
+running++;
 
 if ( argv.s ) {
   mp4Command.setStartTime(argv.s);
@@ -84,6 +100,7 @@ var webmCommand = new FFmpeg({
   source: inputPath,
   preset: path.resolve(__dirname, 'lib/presets')
 });
+running++;
 
 if ( argv.s ) {
   webmCommand.setStartTime(argv.s);
@@ -108,6 +125,7 @@ var oggCommand = new FFmpeg({
   source: inputPath,
   preset: path.resolve(__dirname, 'lib/presets')
 });
+running++;
 
 if ( argv.s ) {
   oggCommand.setStartTime(argv.s);
@@ -132,6 +150,7 @@ var pngCommand = new FFmpeg({
   source: inputPath,
   preset: path.resolve(__dirname, 'lib/presets')
 });
+running++;
 
 if ( argv.s ) {
   pngCommand.setStartTime(argv.s);
@@ -169,8 +188,13 @@ function startEvent(commandLine) {
   console.log(commandLine, '\n');
 }
 
-function endEvent() {
+function endEvent(a) {
   console.log('Processing finished!');
+  running--;
+
+  if ( running === 0 ) {
+    done();
+  }
 }
 
 function errorEvent(err) {
@@ -185,5 +209,45 @@ function progressEvent(progress) {
 }
 
 function codecDataEvent(data) {
-  console.log('codecData', data, '\n');
+  // console.log('codecData', data, '\n');
+}
+
+function done() {
+  console.log('Done.');
+
+  if ( argv.upload ) {
+    upload();
+  }
+
+}
+
+function upload() {
+
+  var rsync = new Rsync()
+    .flags('az')
+    .source( outputDirectory )
+    .destination( argv.upload );
+
+  rsync.execute(function(error, code, cmd) {
+    if ( error ) {
+      console.error( error );
+    }
+    if ( code !== 0 ) {
+      console.warning( code );
+    }
+
+    var url;
+    if ( argv.baseurl ) {
+      url = path.join( argv.baseurl, path.basename(outputDirectory) );
+      if ( argv.open ) {
+        cmdOpen(url);
+      }
+    } else {
+      url = path.basename(outputDirectory);
+    }
+
+    console.log( url );
+
+  });
+
 }
