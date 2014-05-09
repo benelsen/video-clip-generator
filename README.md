@@ -12,10 +12,26 @@ npm install -g video-clip-generator
 ## Usage
 
 ```
-video-clip-generator \
-  -s hh:mm:ss.sss \ # start time (complete verbose format currently required)
-  -d hh:mm:ss.sss \ # duration
-  --title 'Your title' \ # optional title, defaults to “Video”
-  ./path/to/input/file.mkv \ # input file
-  ./path/to/outputfolder # output folder, files will be writen here (can’t be an exisiting folder right now)
+video-clip-generator [options] inputfile outputfolder
+
+inputfile: A ffmpeg readable video file
+
+outputfolder: files will be writen here (can’t be an exisiting folder right now)
+
+Options:
+
+   --start, -s  hh:mm:ss.sss                   Start time (verbose format currently required)
+
+--duration, -d  hh:mm:ss.sss                   Duration (verbose format currently required)
+
+   --title, -t  String                         Title / Name [default: Video]
+
+  --upload, -u  user@example.com:~/html/video  Destination for rsync
+
+ --baseurl, -b  http://example.com/html/video
+
+    --open      Boolean                        Open url upon upload completion [default: true]
+                                               Only works if --upload and --baseurl are set correctly
+
+    --tune      String                         tune option for x264 (e.g. animation, film)
 ```
