@@ -16,7 +16,7 @@ video-clip-generator [options] inputfile outputfolder
 
 inputfile: A ffmpeg readable video file
 
-outputfolder: files will be writen here (can’t be an exisiting folder right now)
+outputfolder: files will be written here (can’t be an exisiting folder right now)
 
 Options:
 
@@ -32,5 +32,6 @@ Options:
 
     --open      Boolean                        Open url upon upload completion [default: true]
                                                Only works if --upload and --baseurl are set correctly
+
     --tune      String                         tune option for x264 (e.g. animation, film)
 ```
