@@ -9,7 +9,7 @@
   "license": "ISC",
   "dependencies": {
     "fluent-ffmpeg": "^1.7.1",
-    "minimist": "0.0.9",
+    "minimist": "0.1.0",
     "mkdirp": "^0.5.0",
     "moment": "^2.6.0",
     "mustache": "^0.8.1",
